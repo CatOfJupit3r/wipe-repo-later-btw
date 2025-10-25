@@ -1,35 +1,29 @@
 <?php
-// Simple assignment-06 application using mysqli (procedural)
 session_start();
 
-// flash message carried through a redirect
 $flash = null;
 if (isset($_SESSION['flash'])) {
     $flash = $_SESSION['flash'];
     unset($_SESSION['flash']);
 }
 
-// Developer info
 $group = "Група: СП-41";
 $developer = "Розробник: Бармак Роман Миколайович";
-$created = "Дата створення: 25.10.2025";
+$created = "Дата створення: 22.10.2025";
 $now = date("d.m.Y H:i");
 
 function safe($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
-// DB credentials (match docker-compose)
 $DB_HOST = getenv('DB_HOST') ?: 'db';
 $DB_USER = getenv('DB_USER') ?: 'appuser';
 $DB_PASS = getenv('DB_PASS') ?: 'apppass';
 $DB_NAME = getenv('DB_NAME') ?: 'assignment06';
 
-// Connect to DB
 $mysqli = @mysqli_connect($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 if (!$mysqli) {
     $db_error = 'Cannot connect to DB: ' . mysqli_connect_error();
 } else {
     mysqli_set_charset($mysqli, 'utf8mb4');
-    // Ensure table exists
     $create = "CREATE TABLE IF NOT EXISTS people (
         id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
@@ -40,16 +34,13 @@ if (!$mysqli) {
     mysqli_query($mysqli, $create);
 }
 
-// Simple single-user auth (username/password)
 $AUTH_USER = 'admin';
-$AUTH_PASS = 'Secret123'; // plaintext for simplicity (beginner-friendly)
+$AUTH_PASS = 'Secret123';
 
-// Handle logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     session_unset(); session_destroy(); header('Location: index.php'); exit;
 }
 
-// Handle login
 $login_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $user = isset($_POST['user']) ? trim($_POST['user']) : '';
@@ -62,9 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     }
 }
 
-// Require auth for CRUD actions and listing
 if (!isset($_SESSION['user'])) {
-    // show login form
     ?>
     <!doctype html>
     <html><head><meta charset="utf-8"><title>Assignment 06 - Login</title></head><body>
@@ -86,9 +75,6 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// From this point user is authenticated
-
-// Actions: add, edit, delete
 $messages = [];
 if (!$mysqli) {
     $messages[] = isset($db_error) ? $db_error : 'DB not available';
@@ -105,7 +91,7 @@ if (!$mysqli) {
                 mysqli_stmt_bind_param($stmt, 'sis', $name, $age, $email);
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_close($stmt);
-                // set flash and redirect to avoid re-showing edit form (Post/Redirect/Get)
+
                 $_SESSION['flash'] = 'Додано запис.';
                 header('Location: index.php');
                 exit;
@@ -142,13 +128,11 @@ if (!$mysqli) {
         }
     }
 
-    // Sorting (derive value safely to avoid undefined index warnings)
     $allowed = ['id','name','age','email','created_at'];
     $requested_sort = $_GET['sort'] ?? 'id';
     $sort = in_array($requested_sort, $allowed, true) ? $requested_sort : 'id';
     $order = (isset($_GET['order']) && strtolower($_GET['order']) === 'desc') ? 'DESC' : 'ASC';
 
-    // Build query using validated column name. Wrap column with backticks as it's from a whitelist.
     $order_by = "`" . $sort . "` " . $order;
     $sql = "SELECT id,name,age,email,created_at FROM people ORDER BY " . $order_by;
     $res = mysqli_query($mysqli, $sql);
@@ -163,7 +147,6 @@ if (!$mysqli) {
     }
 }
 
-// Helper to build sort links toggling order
 function sort_link($col, $label) {
     $current = $_GET['sort'] ?? 'id';
     $order = (isset($_GET['order']) && strtolower($_GET['order']) === 'desc') ? 'desc' : 'asc';
@@ -194,8 +177,9 @@ function sort_link($col, $label) {
     <p>Поточна дата: <?php echo safe($now); ?></p>
     <p>Користувач: <?php echo safe($_SESSION['user']); ?> — <a href="?action=logout">Вийти</a></p>
 </div>
+<a href="../index.php">← Назад</a>
 
-<?php if ($flash) echo '<div style="color:green">'.safe($flash).'</div>'; ?>
+<?php if ($flash) echo '<div style="color:green">'.safe($flash)."</div>"; ?>
 <?php foreach ($messages as $m) echo '<div style="color:green">'.safe($m).'</div>'; ?>
 
 <h2>Список записів</h2>
@@ -230,7 +214,6 @@ function sort_link($col, $label) {
 </div>
 
 <?php
-// If editing, load record
 $edit = null;
 if (isset($_GET['edit']) && $mysqli) {
     $id = (int)$_GET['edit'];

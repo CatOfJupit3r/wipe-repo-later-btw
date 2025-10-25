@@ -13,19 +13,16 @@
 <?php
 $group = "Група: СП-41";
 $developer = "Розробник: Бармак Роман Миколайович";
-$created = "Дата створення: 25.10.2025";
+$created = "Дата створення: 17.10.2025";
 $now = date("d.m.Y H:i");
 
-// Вхідний масив D
 $D = array(6, 8, 12, -5, 4, 3, -8, 1, 8, 5);
 
-// Обчислення добутку елементів масиву D
 $product = 1;
 foreach ($D as $value) {
     $product *= $value;
 }
 
-// Визначення кореня
 if ($product > 0) {
     $root = pow($product, 1/2);
     $root_type = 'квадратний';
@@ -34,13 +31,11 @@ if ($product > 0) {
     $root_type = 'кубічний';
 }
 
-// Новий масив
 $newArray = array();
 foreach ($D as $value) {
     $newArray[] = $root * $value;
 }
 
-// Пошук від’ємних елементів та їх індексів
 $negativeCount = 0;
 $negativeIndices = array();
 foreach ($newArray as $index => $value) {
@@ -50,6 +45,13 @@ foreach ($newArray as $index => $value) {
     }
 }
 ?>
+    <div class="block">
+        <p><?php echo $group; ?></p>
+        <p><?php echo $developer; ?></p>
+        <p><?php echo $created; ?></p>
+        <p>Поточна дата: <?php echo $now; ?></p>
+    </div>
+    <a href="../index.php">← Назад</a>
     <div class="formula">
         <img src="https://latex.codecogs.com/svg.image?P=\prod_{i=1}^{10}D_i" alt="Формула добутку">
         <br>
@@ -74,11 +76,6 @@ foreach ($newArray as $index => $value) {
         <br>
         <strong>Їх індекси:</strong> <?php echo implode(', ', $negativeIndices); ?>
     </div>
-    <div class="block">
-        <strong><?php echo $group; ?></strong><br>
-        <strong><?php echo $developer; ?></strong><br>
-        <strong><?php echo $created; ?></strong><br>
-        <strong>Поточна дата:</strong> <?php echo $now; ?>
-    </div>
+
 </body>
 </html>

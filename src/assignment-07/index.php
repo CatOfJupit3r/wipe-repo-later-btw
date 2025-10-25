@@ -1,17 +1,13 @@
 <?php
-// Assignment 07 - AJAX demo (jQuery, PHP, MySQLi)
 session_start();
 
-// Simple auth (same as assignment-06)
 $AUTH_USER = 'admin';
 $AUTH_PASS = 'Secret123';
 
-// Handle logout
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     session_unset(); session_destroy(); header('Location: index.php'); exit;
 }
 
-// Handle login POST
 $login_error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $user = isset($_POST['user']) ? trim($_POST['user']) : '';
@@ -26,12 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
 $group = "Група: СП-41";
 $developer = "Розробник: Бармак Роман Миколайович";
-$created = "Дата створення: 25.10.2025";
+$created = "Дата створення: 24.10.2025";
 $now = date("d.m.Y H:i");
 
 function safe($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
-// If not authenticated, show login form and exit
 if (!isset($_SESSION['user'])) {
     ?>
     <!doctype html>
@@ -54,7 +49,6 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-// DB connection (reuse same DB from docker-compose)
 $DB_HOST = getenv('DB_HOST') ?: 'db';
 $DB_USER = getenv('DB_USER') ?: 'appuser';
 $DB_PASS = getenv('DB_PASS') ?: 'apppass';
@@ -87,6 +81,8 @@ if ($mysqli) mysqli_set_charset($mysqli, 'utf8mb4');
     <p>Користувач: <?php echo safe($_SESSION['user']); ?> — <a href="?action=logout">Вийти</a></p>
 </div>
 
+<a href="../index.php">← Назад</a>
+
 <h2>Пошук підказок (AJAX)</h2>
 <p>Введіть ім'я (англійські букви) і отримаєте підказки:</p>
 <input type="text" id="q" placeholder="Start typing..."> <span id="hint" class="hint"></span>
@@ -106,7 +102,6 @@ if ($mysqli) mysqli_set_charset($mysqli, 'utf8mb4');
 
 <script>
 $(function(){
-    // show hints using GET to gethint.php
     $('#q').on('keyup', function(){
         var v = $(this).val();
         if (v.length === 0) { $('#hint').text(''); return; }
@@ -115,7 +110,6 @@ $(function(){
         });
     });
 
-    // load records as JSON
     function loadRecords(){
         $.getJSON('api.php', { action: 'list' }, function(resp){
             if (!resp || !resp.data) { $('#records').html('Немає даних'); return; }
@@ -128,12 +122,10 @@ $(function(){
         }).fail(function(xhr){ $('#records').html('Помилка завантаження'); });
     }
 
-    // helper to escape
     function escapeHtml(s){ return $('<div>').text(s).html(); }
 
     loadRecords();
 
-    // submit add form via AJAX POST
     $('#addForm').on('submit', function(e){
         e.preventDefault();
         var data = $(this).serialize() + '&action=add';

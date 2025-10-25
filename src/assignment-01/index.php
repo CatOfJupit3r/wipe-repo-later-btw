@@ -1,6 +1,6 @@
 <?php
-$group = "Група: КН-000";
-$developer = "Розробник: Прізвище Ім'я По батькові";
+$group = "Група: СП-41";
+$developer = "Розробник: Бармак Роман Миколайович";
 $created = "Дата створення: 15.10.2025";
 $now = date("d.m.Y H:i");
 
@@ -72,7 +72,13 @@ if ($amountInput !== '') {
 </head>
 <body>
     <h1>Визначення правильної форми слова гривня</h1>
-
+    <p><?php echo htmlspecialchars($group); ?></p>
+    <p><?php echo htmlspecialchars($developer); ?></p>
+    <p><?php echo htmlspecialchars($created); ?></p>
+    <p>Поточна дата: <?php echo htmlspecialchars($now); ?></p>
+    <a href="../index.php">← Назад</a>
+    
+    <hr>
     <form method="get">
         <label>Число (1-999):</label>
         <input type="number" name="amount" min="1" max="999" value="<?php echo htmlspecialchars($amountInput); ?>">
@@ -88,10 +94,5 @@ if ($amountInput !== '') {
         <p>Альтернативний switch: <?php echo htmlspecialchars($resultAlternative); ?></p>
     <?php } ?>
 
-    <hr>
-    <p><?php echo htmlspecialchars($group); ?></p>
-    <p><?php echo htmlspecialchars($developer); ?></p>
-    <p><?php echo htmlspecialchars($created); ?></p>
-    <p>Поточна дата: <?php echo htmlspecialchars($now); ?></p>
 </body>
 </html>

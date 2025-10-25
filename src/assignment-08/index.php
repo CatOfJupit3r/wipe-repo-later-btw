@@ -1,33 +1,28 @@
 <?php
-// Assignment 08 - XML with SimpleXML (beginner-friendly)
 session_start();
 
 $group = "Група: СП-41";
 $developer = "Розробник: Бармак Роман Миколайович";
-$created = "Дата створення: 25.10.2025";
+$created = "Дата створення: 27.10.2025";
 $now = date("d.m.Y H:i");
 
 function safe($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
 $file = __DIR__ . '/data.xml';
 
-// Ensure data file exists
 if (!file_exists($file)) {
     file_put_contents($file, "<?xml version=\"1.0\" encoding=\"UTF-8\"?><books></books>");
 }
 
-// Load XML
 $xml = simplexml_load_file($file);
 if ($xml === false) {
     $error = 'Cannot parse XML file.';
     $xml = new SimpleXMLElement('<books></books>');
 }
 
-// Flash helper
 function flash_set($m) { $_SESSION['_flash'] = $m; }
 function flash_get() { $m = $_SESSION['_flash'] ?? null; unset($_SESSION['_flash']); return $m; }
 
-// Helper: remove child element by tag name and index using DOM (more reliable than unset on SimpleXML)
 function remove_child_at_index($simpleParent, $childTag, $index) {
     $domParent = dom_import_simplexml($simpleParent);
     if (!$domParent) return false;
@@ -42,7 +37,6 @@ function remove_child_at_index($simpleParent, $childTag, $index) {
     return true;
 }
 
-// DOM-based helpers that operate directly on the XML file to avoid SimpleXML index quirks
 function dom_remove_book_at_file($file, $bid) {
     $dom = new DOMDocument();
     $dom->preserveWhiteSpace = false;
@@ -63,7 +57,7 @@ function dom_add_character_to_book_file($file, $bid, $name, $desc) {
     $books = $dom->getElementsByTagName('book');
     if ($books->length <= $bid) return false;
     $book = $books->item($bid);
-    // find or create characters element
+
     $chars = null;
     foreach ($book->childNodes as $cn) {
         if ($cn->nodeType === XML_ELEMENT_NODE && $cn->nodeName === 'characters') { $chars = $cn; break; }
@@ -89,7 +83,7 @@ function dom_remove_character_at_file($file, $bid, $cid) {
     $books = $dom->getElementsByTagName('book');
     if ($books->length <= $bid) return false;
     $book = $books->item($bid);
-    // find characters element
+
     $chars = null;
     foreach ($book->childNodes as $cn) {
         if ($cn->nodeType === XML_ELEMENT_NODE && $cn->nodeName === 'characters') { $chars = $cn; break; }
@@ -104,7 +98,6 @@ function dom_remove_character_at_file($file, $bid, $cid) {
     return $dom->save($file) !== false;
 }
 
-// Handle POST actions (add/edit/delete)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     if ($action === 'add_book') {
@@ -125,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'delete_book' && isset($_POST['bid'])) {
         $bid = (int)$_POST['bid'];
             if (isset($xml->book[$bid])) {
-                // remove book using DOM helper to avoid SimpleXML unset inconsistencies
                 if (dom_remove_book_at_file($file, $bid)) {
                     $xml = simplexml_load_file($file);
                     flash_set('Книгу видалено.');
@@ -203,6 +195,8 @@ $flash = flash_get();
     <p>Поточна дата: <?php echo safe($now); ?></p>
 </div>
 
+<a href="../index.php">← Назад</a>
+
 <?php if (!empty($flash)) echo '<div style="color:green">'.safe($flash)."</div>"; ?>
 
 <h2>XML - Книги</h2>
@@ -266,6 +260,5 @@ $flash = flash_get();
 
 <h3>RAW XML</h3>
 <pre><?php echo safe($xml->asXML()); ?></pre>
-
 </body>
 </html>

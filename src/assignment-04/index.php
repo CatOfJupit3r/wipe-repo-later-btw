@@ -1,7 +1,7 @@
 <?php
 $group = "Група: СП-41";
 $developer = "Розробник: Бармак Роман Миколайович";
-$created = "Дата створення: 25.10.2025";
+$created = "Дата створення: 18.10.2025";
 $now = date("d.m.Y H:i");
 
 $D = [
@@ -26,7 +26,7 @@ if ($maxNegGtMinus10 !== null) {
 	foreach ($D as $rIdx => $row) {
 		$transformed[$rIdx] = [];
 		foreach ($row as $cIdx => $v) {
-			$transformed[$rIdx][$cIdx] = $v * $v; // square
+			$transformed[$rIdx][$cIdx] = $v * $v;
 		}
 	}
 	$transformMode = 'square';
@@ -34,18 +34,15 @@ if ($maxNegGtMinus10 !== null) {
 	foreach ($D as $rIdx => $row) {
 		$transformed[$rIdx] = [];
 		foreach ($row as $cIdx => $v) {
-			// cube root with sign preservation
 			$transformed[$rIdx][$cIdx] = ($v >= 0) ? pow($v, 1.0/3.0) : -pow(abs($v), 1.0/3.0);
 		}
 	}
 	$transformMode = 'cuberoot';
 }
 
-// 3) Compute products of elements of the first and second rows (rows 0 and 1)
 $prodRow0 = array_product($transformed[0]);
 $prodRow1 = array_product($transformed[1]);
 
-// 4) Compute sums of elements of the first and second columns (columns 0 and 1)
 $sumCol0 = 0.0;
 $sumCol1 = 0.0;
 foreach ($transformed as $row) {
@@ -53,7 +50,6 @@ foreach ($transformed as $row) {
 	$sumCol1 += $row[1];
 }
 
-// 5) Determine the smallest among these four values and raise it to the 5th power
 $values = [
 	'prod_row_0' => $prodRow0,
 	'prod_row_1' => $prodRow1,
@@ -64,7 +60,6 @@ $minKey = array_keys($values, min($values))[0];
 $minValue = $values[$minKey];
 $minPow5 = pow($minValue, 5);
 
-// Helper to render a matrix as HTML table
 function render_matrix_table($matrix)
 {
 	$html = "<table class=\"matrix\">";
@@ -98,7 +93,7 @@ function render_matrix_table($matrix)
 <body>
 
 	<h1>Завдання 04 — Обробка матриць</h1>
-
+	
 	<div class="block">
 		<?php
 		echo "<p>$group</p>";
@@ -107,7 +102,8 @@ function render_matrix_table($matrix)
 		echo "<p>Поточна дата: $now</p>";
 		?>
 	</div>
-
+	<a href="../index.php">← Назад</a>
+	
 	<h2>Вхідна матриця D</h2>
 	<?= render_matrix_table($D) ?>
 
@@ -148,7 +144,7 @@ function render_matrix_table($matrix)
 		</div>
 	</div>
 
-	<h2>Візуалізація (проста)</h2>
+	<h2>Візуалізація</h2>
 	<p class="legend">Перетворена матриця відображена як кольорова сітка (червоний = від\'ємне, зелений = додатне)</p>
 	<div class="figure">
 		<table class="matrix">
@@ -164,6 +160,5 @@ function render_matrix_table($matrix)
 			<?php endforeach; ?>
 		</table>
 	</div>
-
 </body>
 </html>

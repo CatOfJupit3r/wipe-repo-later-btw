@@ -2,7 +2,7 @@
 <?php
 $group = "Група: СП-41";
 $developer = "Розробник: Бармак Роман Миколайович";
-$created = "Дата створення: 25.10.2025";
+$created = "Дата створення: 20.10.2025";
 $now = date("d.m.Y H:i");
 $result = [];
 $errors = [];
@@ -138,6 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	echo "<p>Поточна дата: " . safe($now) . "</p>";
 	?>
 </div>
+<a href="../index.php">← Назад</a>
 <h2>Форма для перевірки регулярних виразів (15 полів)</h2>
 <form method="post" enctype="multipart/form-data">
 	<div><label>Текст: <input type="text" name="text" value="<?php if(isset($_POST['text'])) echo safe($_POST['text']); ?>" maxlength="20"></label></div>
