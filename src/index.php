@@ -45,6 +45,7 @@
         <li><a href="assignment-05/">Assignment 5</a></li>
         <li><a href="assignment-06/">Assignment 6</a></li>
         <li><a href="assignment-07/">Assignment 7</a></li>
+        <li><a href="assignment-08/">Assignment 8</a></li>
     </ul>
 </body>
 </html>

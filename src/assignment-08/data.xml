@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<books>
+  <book>
+    <title>wtf</title>
+    <plot>sfweferfsfwef wef</plot>
+    <characters>
+      <character>
+        <name>цкркер</name>
+        <desc>цкерцке</desc>
+      </character>
+      <character>
+        <name>wefwe</name>
+        <desc/>
+      </character>
+    </characters>
+    <success type="bestseller">4</success>
+    <success type="bookclubs">9</success>
+  </book>
+  <book>
+    <title>wtf</title>
+    <plot>sfweferfhr thsrth srth s</plot>
+    <characters>
+      <character>
+        <name>fghrtesh</name>
+        <desc/>
+      </character>
+    </characters>
+  </book>
+</books>
