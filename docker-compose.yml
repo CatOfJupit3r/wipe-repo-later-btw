@@ -8,33 +8,11 @@ x-php-service: &php-service
   tty: true
 
 services:
-  assignment-01:
-    <<: *php-service
-    working_dir: /app/src/assignment-01
-  assignment-02:
-    <<: *php-service
-    working_dir: /app/src/assignment-02
-  assignment-03:
-    <<: *php-service
-    working_dir: /app/src/assignment-03
-  assignment-04:
-    <<: *php-service
-    working_dir: /app/src/assignment-04
-  assignment-05:
-    <<: *php-service
-    working_dir: /app/src/assignment-05
-  assignment-06:
-    <<: *php-service
-    working_dir: /app/src/assignment-06
-  assignment-07:
-    <<: *php-service
-    working_dir: /app/src/assignment-07
-  assignment-08:
-    <<: *php-service
-    working_dir: /app/src/assignment-08
-  assignment-09:
-    <<: *php-service
-    working_dir: /app/src/assignment-09
-  assignment-10:
-    <<: *php-service
-    working_dir: /app/src/assignment-10
+  web:
+    image: php:8.3-cli
+    volumes:
+      - .:/app
+    working_dir: /app/src
+    ports:
+      - "8000:8000"
+    command: php -S 0.0.0.0:8000
