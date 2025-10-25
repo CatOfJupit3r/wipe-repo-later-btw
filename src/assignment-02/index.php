@@ -20,7 +20,7 @@ $text_style = "text-align: center; margin-top: 5px;";
 
 // display formula
 echo "<h1>Формула</h1>";
-echo "<p>$formula</p>";
+echo '<img src="https://latex.codecogs.com/svg.image?y%20%3D%20a%20%5Ccdot%20b%20%5Ccdot%20c%20%2B%20%5Csqrt%7Bx%7D%20%2B%20e%5Ex%20%2B%20%5Ctan%28%5Cmin%28a%2C%20b%2C%20c%29%29" alt="Формула">';
 
 // while
 echo "<h2>While</h2>";
