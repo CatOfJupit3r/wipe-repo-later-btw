@@ -84,6 +84,7 @@ if ($mysqli) mysqli_set_charset($mysqli, 'utf8mb4');
     <p><?php echo safe($developer); ?></p>
     <p><?php echo safe($created); ?></p>
     <p>Поточна дата: <?php echo safe($now); ?></p>
+    <p>Користувач: <?php echo safe($_SESSION['user']); ?> — <a href="?action=logout">Вийти</a></p>
 </div>
 
 <h2>Пошук підказок (AJAX)</h2>
